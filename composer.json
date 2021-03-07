@@ -1,0 +1,33 @@
+{
+    "name": "zxin/think-symfony-bridge",
+    "type": "library",
+    "description": "thinkphp symfony bridge",
+    "keywords": [],
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "auooru",
+            "email": "auooru@outlook.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1|^8.0",
+        "symfony/console": "^4.4|^5.2",
+        "topthink/framework": "^6.0"
+    },
+    "suggest": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Zxin\\Think\\Symfony\\": "src"
+        },
+        "files": []
+    },
+    "autoload-dev": {
+        "psr-4": {}
+    },
+    "extra": {},
+    "config": {
+        "sort-packages": true
+    }
+}
