@@ -6,6 +6,8 @@ namespace Zxin\Think\Symfony\Console;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use think\console\Input;
+use think\console\input\Argument;
+use function is_scalar;
 
 class InputBridge implements InputInterface
 {
@@ -23,7 +25,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function getFirstArgument()
+    public function getFirstArgument(): ?string
     {
         return $this->input->getFirstArgument();
     }
@@ -31,7 +33,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function hasParameterOption($values, bool $onlyParams = false)
+    public function hasParameterOption($values, bool $onlyParams = false): bool
     {
         return $this->input->hasParameterOption($values);
     }
@@ -63,9 +65,20 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function getArguments()
+    public function getArguments(): array
     {
-        return $this->input->getArguments();
+        // 可能是冗余代码，TP注解错误，先观察
+        $values = [];
+        foreach ($this->input->getArguments() as $name => $argument) {
+            if ($argument instanceof Argument) {
+                $values[$name] = $argument->getDefault();
+            } elseif (is_scalar($argument)) {
+                $values[$name] = $argument;
+            } else {
+                throw new \Error("getArguments convert fail {$name}");
+            }
+        }
+        return $values;
     }
 
     /**
@@ -87,7 +100,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function hasArgument($name)
+    public function hasArgument($name): bool
     {
         return $this->input->hasArgument($name);
     }
@@ -95,7 +108,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->input->getOptions();
     }
@@ -119,7 +132,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function hasOption(string $name)
+    public function hasOption(string $name): bool
     {
         return $this->input->hasOption($name);
     }
@@ -127,7 +140,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function isInteractive()
+    public function isInteractive(): bool
     {
         return $this->input->isInteractive();
     }

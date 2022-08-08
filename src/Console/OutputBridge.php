@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Zxin\Think\Symfony\Console;
 
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use think\console\Output;
@@ -82,7 +83,7 @@ class OutputBridge implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function getVerbosity()
+    public function getVerbosity(): int
     {
         return self::VERBOSITY_MAPPING[$this->output->getVerbosity()];
     }
@@ -90,7 +91,7 @@ class OutputBridge implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function isQuiet()
+    public function isQuiet(): bool
     {
         return $this->output->isQuiet();
     }
@@ -98,7 +99,7 @@ class OutputBridge implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function isVerbose()
+    public function isVerbose(): bool
     {
         return $this->output->isVerbose();
     }
@@ -106,7 +107,7 @@ class OutputBridge implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function isVeryVerbose()
+    public function isVeryVerbose(): bool
     {
         return $this->output->isVeryVerbose();
     }
@@ -114,7 +115,7 @@ class OutputBridge implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function isDebug()
+    public function isDebug(): bool
     {
         return $this->output->isDebug();
     }
@@ -130,9 +131,10 @@ class OutputBridge implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function isDecorated()
+    public function isDecorated(): bool
     {
         // ignore
+        return false;
     }
 
     public function setFormatter(OutputFormatterInterface $formatter)
@@ -143,8 +145,9 @@ class OutputBridge implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function getFormatter()
+    public function getFormatter(): OutputFormatterInterface
     {
         // ignore
+        return new OutputFormatter();
     }
 }
