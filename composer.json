@@ -2,7 +2,11 @@
     "name": "zxin/think-symfony-bridge",
     "type": "library",
     "description": "thinkphp symfony bridge",
-    "keywords": [],
+    "keywords": [
+        "thinkphp",
+        "console",
+        "symfony bridge"
+    ],
     "license": "Apache-2.0",
     "authors": [
         {
