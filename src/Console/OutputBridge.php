@@ -10,6 +10,11 @@ use think\console\Output;
 
 class OutputBridge implements OutputInterface
 {
+    // Symfony 7.2 added silent output; ThinkPHP only has quiet output.
+    public const VERBOSITY_SILENT = 8;
+
+    private bool $silent = false;
+
     const OPTIONS_MAPPING = [
         self::OUTPUT_NORMAL => Output::OUTPUT_NORMAL,
         self::OUTPUT_RAW => Output::OUTPUT_RAW,
@@ -43,14 +48,17 @@ class OutputBridge implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function write($messages, bool $newline = false, int $options = 0)
+    public function write($messages, bool $newline = false, int $options = 0): void
     {
+        if ($this->silent) {
+            return;
+        }
+
         $types = self::OUTPUT_NORMAL | self::OUTPUT_RAW | self::OUTPUT_PLAIN;
         $type = $types & $options ?: self::OUTPUT_NORMAL;
 
-        $verbosities = self::VERBOSITY_QUIET | self::VERBOSITY_NORMAL | self::VERBOSITY_VERBOSE | self::VERBOSITY_VERY_VERBOSE | self::VERBOSITY_DEBUG;
+        $verbosities = self::VERBOSITY_SILENT | self::VERBOSITY_QUIET | self::VERBOSITY_NORMAL | self::VERBOSITY_VERBOSE | self::VERBOSITY_VERY_VERBOSE | self::VERBOSITY_DEBUG;
         $verbosity = $verbosities & $options ?: self::VERBOSITY_NORMAL;
-        $verbosity = self::OPTIONS_MAPPING[$verbosity];
 
         if ($verbosity > $this->getVerbosity()) {
             return;
@@ -67,7 +75,7 @@ class OutputBridge implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function writeln($messages, int $options = 0)
+    public function writeln($messages, int $options = 0): void
     {
         $this->write($messages, true, $options);
     }
@@ -75,9 +83,10 @@ class OutputBridge implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function setVerbosity(int $level)
+    public function setVerbosity(int $level): void
     {
-        $this->output->setVerbosity(self::OPTIONS_MAPPING[$level]);
+        $this->silent = self::VERBOSITY_SILENT === $level;
+        $this->output->setVerbosity($this->silent ? Output::VERBOSITY_QUIET : self::OPTIONS_MAPPING[$level]);
     }
 
     /**
@@ -85,15 +94,24 @@ class OutputBridge implements OutputInterface
      */
     public function getVerbosity(): int
     {
+        if ($this->silent) {
+            return self::VERBOSITY_SILENT;
+        }
+
         return self::VERBOSITY_MAPPING[$this->output->getVerbosity()];
     }
 
     /**
      * @inheritDoc
      */
+    public function isSilent(): bool
+    {
+        return $this->silent;
+    }
+
     public function isQuiet(): bool
     {
-        return $this->output->isQuiet();
+        return !$this->silent && $this->output->isQuiet();
     }
 
     /**
@@ -123,7 +141,7 @@ class OutputBridge implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function setDecorated(bool $decorated)
+    public function setDecorated(bool $decorated): void
     {
         // $this->output->setDecorated($decorated);
     }
@@ -137,7 +155,7 @@ class OutputBridge implements OutputInterface
         return false;
     }
 
-    public function setFormatter(OutputFormatterInterface $formatter)
+    public function setFormatter(OutputFormatterInterface $formatter): void
     {
         // ignore
     }

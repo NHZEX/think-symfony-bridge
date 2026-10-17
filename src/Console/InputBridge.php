@@ -22,6 +22,11 @@ class InputBridge implements InputInterface
         $this->input = $input;
     }
 
+    public function __toString(): string
+    {
+        return (string) $this->input;
+    }
+
     /**
      * @inheritDoc
      */
@@ -41,7 +46,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function getParameterOption($values, $default = false, bool $onlyParams = false)
+    public function getParameterOption($values, $default = false, bool $onlyParams = false): mixed
     {
         return $this->input->getParameterOption($values, $default);
     }
@@ -49,7 +54,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function bind(InputDefinition $definition)
+    public function bind(InputDefinition $definition): void
     {
         // ignore
     }
@@ -57,7 +62,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function validate()
+    public function validate(): void
     {
         $this->input->validate();
     }
@@ -72,7 +77,7 @@ class InputBridge implements InputInterface
         foreach ($this->input->getArguments() as $name => $argument) {
             if ($argument instanceof Argument) {
                 $values[$name] = $argument->getDefault();
-            } elseif (is_scalar($argument)) {
+            } elseif (is_scalar($argument) || is_array($argument) || null === $argument) {
                 $values[$name] = $argument;
             } else {
                 throw new \Error("getArguments convert fail {$name}");
@@ -84,7 +89,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function getArgument(string $name)
+    public function getArgument(string $name): mixed
     {
         return $this->input->getArgument($name);
     }
@@ -92,7 +97,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function setArgument(string $name, $value)
+    public function setArgument(string $name, $value): void
     {
         $this->input->setArgument($name, $value);
     }
@@ -116,7 +121,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function getOption(string $name)
+    public function getOption(string $name): mixed
     {
         return $this->input->getOption($name);
     }
@@ -124,7 +129,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function setOption(string $name, $value)
+    public function setOption(string $name, $value): void
     {
         $this->input->setOption($name, $value);
     }
@@ -148,7 +153,7 @@ class InputBridge implements InputInterface
     /**
      * @inheritDoc
      */
-    public function setInteractive(bool $interactive)
+    public function setInteractive(bool $interactive): void
     {
         $this->input->setInteractive($interactive);
     }

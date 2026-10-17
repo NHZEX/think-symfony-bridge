@@ -15,12 +15,11 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.1",
         "symfony/console": "^5.4|^6.0|^7.0",
         "topthink/framework": "^6.0|~8.0|~8.1"
     },
-    "suggest": {
-    },
+    "suggest": {},
     "autoload": {
         "psr-4": {
             "Zxin\\Think\\Symfony\\": "src"
@@ -33,5 +32,8 @@
     "extra": {},
     "config": {
         "sort-packages": true
+    },
+    "scripts": {
+        "test": "@php tests/bridge.php"
     }
 }
