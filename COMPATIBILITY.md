@@ -1,6 +1,6 @@
-# 4.0 兼容性与验证（候选，尚未发布）
+# 4.0 兼容性与验证
 
-- 最低 PHP 8.1；支持 Symfony Console 5.4、6.x、7.x，以及 ThinkPHP 6.x、8.0、8.1。
+- 最低 PHP 8.1（Composer 约束 `^8.1`）；支持 Symfony Console 5.4、6.x、7.x（7.x 需要 PHP 8.2+），以及 ThinkPHP 6.x、8.0、8.1。
 - Symfony 7 的接口要求 `mixed` / `void` 返回类型，不能继续以同一份实现支持 PHP 7.4。PHP 7.4 / 8.0 项目应保留 3.x，并使用其兼容的 Symfony 版本；3.x 的 Symfony 7 声明不代表实际接口兼容。
 - 补齐 Input / Output 接口签名，并提供新版接口的 `__toString()`，直接委托 ThinkPHP 的命令行转义实现。
 - `getArguments()` 保留数组参数和 `null` 默认值，修复原实现抛错。
@@ -29,13 +29,13 @@ composer update --with 'symfony/console:^7.0'
 composer test
 ```
 
-CI 配置分别验证 PHP 8.1 + Symfony 5.4 / 6.4，以及 PHP 8.2 / 8.4 + Symfony 7；Symfony 7 自身要求 PHP 8.2+。
-本分支不代表 4.0.0 已发布。联调可通过 Composer path 仓库临时指定版本；正式 `^4.0` 消费必须等待审核、发布相应 tag。
+CI 配置分别验证 PHP 8.1 + Symfony 5.4 / 6.4、PHP 8.2 / 8.4 + Symfony 7，以及 PHP 8.5 + Symfony 6.4 / 7；Symfony 7 自身要求 PHP 8.2+。
+4.x 稳定版安装：`composer require zxin/think-symfony-bridge:^4.0`。
 
-### 本次本地验证记录
+### 发布验证记录
 
 PHP 8.4.24 + ThinkPHP 8.1.4，分别安装 Symfony Console 5.4.54、6.4.48、7.4.21，三组均通过 57 项断言；`composer validate --strict`、所有源码及测试 PHP 语法检查通过。PHP 8.1/8.2 运行时本地未执行。
 
-提交 `49e005e2a917d3cb587ce819f6319f611f083e78` 的 [GitHub Actions 验证](https://github.com/NHZEX/think-symfony-bridge/actions/runs/38996917512) 四组全部通过：PHP 8.1 + Symfony 5.4/6.4、PHP 8.2/8.4 + Symfony 7，均使用 ThinkPHP 8.1，并包含显式 `composer audit`。
+提交 `5587fd9b063dd97f3a1ac48d852928c16172b02c` 的 [GitHub Actions 验证](https://github.com/NHZEX/think-symfony-bridge/actions/runs/38998408888) 六组全部通过：PHP 8.1 + Symfony 5.4/6.4、PHP 8.2/8.4 + Symfony 7、PHP 8.5 + Symfony 6.4/7，均使用 ThinkPHP 8.1，并包含显式 `composer audit`。
 
 另外尝试安装 ThinkPHP 6.x / 8.0.x 时，被 Composer 的安全公告拦截，未关闭安全防护，故这两组没有实际测试。保留原依赖范围不构成安全背书；建议使用仍可通过 Composer 安全检查的 ThinkPHP 8.1 版本。
