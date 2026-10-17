@@ -40,6 +40,8 @@ CI 配置分别验证 PHP 8.1 + Symfony 5.4 / 6.4，以及 PHP 8.2 / 8.4 + Symfo
 
 ### 本次本地验证记录
 
-PHP 8.4.24 + ThinkPHP 8.1.4，分别安装 Symfony Console 5.4.54、6.4.48、7.4.21，三组均通过 57 项断言；`composer validate --strict`、所有源码及测试 PHP 语法检查通过。PHP 8.1/8.2 运行时由 CI 矩阵覆盖，本地未执行，不将 CI 配置视为已通过结果。
+PHP 8.4.24 + ThinkPHP 8.1.4，分别安装 Symfony Console 5.4.54、6.4.48、7.4.21，三组均通过 57 项断言；`composer validate --strict`、所有源码及测试 PHP 语法检查通过。PHP 8.1/8.2 运行时本地未执行；远程提交 `9335fac1de201393aef2ca69abd17bc4e186a70c` 的 [GitHub Actions 验证](https://github.com/NHZEX/think-symfony-bridge/actions/runs/38996760625) 已全部通过：PHP 8.1 + Symfony 5.4/6.4、PHP 8.2/8.4 + Symfony 7，共四组，均使用 ThinkPHP 8.1。
+
+CI 另增加显式 `composer audit`，避免 PHP 安装步骤关闭自动审计后漏检；上述历史运行尚未包含这个新增步骤，后续运行应以该步骤实际结果为准。
 
 另外尝试安装 ThinkPHP 6.x / 8.0.x 时，被 Composer 的安全公告拦截，未关闭安全防护，故这两组没有实际测试。保留原依赖范围不构成安全背书；建议使用仍可通过 Composer 安全检查的 ThinkPHP 8.1 版本。

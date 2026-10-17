@@ -28,4 +28,5 @@ jobs:
           coverage: none
       - run: composer validate --strict
       - run: composer update --with 'symfony/console:${{ matrix.symfony }}' --with 'topthink/framework:${{ matrix.thinkphp }}' --no-interaction --prefer-dist
+      - run: composer audit
       - run: composer test
